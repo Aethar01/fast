@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
+	"net"
+	"os"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -145,6 +148,11 @@ func mbps(bytes int64, d time.Duration) float64 {
 func main() {
 	urls, err := targets(connections)
 	if err != nil {
+		var netErr net.Error
+		if errors.As(err, &netErr) {
+			fmt.Fprintln(os.Stderr, "No internet connection.")
+			os.Exit(1)
+		}
 		log.Fatal(err)
 	}
 
