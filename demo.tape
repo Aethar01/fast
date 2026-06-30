@@ -10,11 +10,11 @@ Require fast
 
 Set Shell bash
 Set FontFamily "JetBrains Mono"
-Set FontSize 32
-Set Width 1100
-Set Height 340
-Set Padding 40
-Set TypingSpeed 120ms
+Set FontSize 96
+Set Width 3300
+Set Height 880
+Set Padding 120
+Set TypingSpeed 100ms
 
 # Clean, minimal prompt
 Hide
