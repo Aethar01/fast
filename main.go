@@ -37,7 +37,6 @@ const (
 )
 
 const (
-	pingLabel     = "Ping"
 	downloadLabel = "↓"
 	uploadLabel   = "↑"
 )
@@ -230,11 +229,11 @@ func renderRow(label string, currentSpeed float64, speeds []float64, peak float6
 // renderSummary renders the final one-line recap: download, upload and ping.
 func renderSummary(m Model) string {
 	sep := unitStyle.Render(" • ")
-	ping := labelStyle.Render(pingLabel) + " "
+	var ping string
 	if m.ping > 0 {
-		ping += speedStyle.Render(fmt.Sprintf("%d", m.ping.Milliseconds())) + unitStyle.Render(" ms")
+		ping = speedStyle.Render(fmt.Sprintf("%d", m.ping.Milliseconds())) + unitStyle.Render(" ms")
 	} else {
-		ping += unitStyle.Render("—")
+		ping = unitStyle.Render("—")
 	}
 	return summarySpeed(downloadLabel, m.dlSpeed, dlSparkStyle) + sep +
 		summarySpeed(uploadLabel, m.ulSpeed, ulSparkStyle) + sep + ping
