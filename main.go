@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/maaslalani/fast/internal/fast"
+	"github.com/Aethar01/faster/internal/fast"
 )
 
 func main() {
