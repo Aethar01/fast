@@ -2,9 +2,9 @@
 # https://github.com/charmbracelet/vhs
 #
 # Generate the GIF with:
-#   vhs demo.tape
+#   vhs faster.tape
 
-Output demo.gif
+Output faster.gif
 
 Require fast
 
