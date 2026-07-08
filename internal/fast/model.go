@@ -22,17 +22,19 @@ const (
 	// sparkWidth is the width, in cells, of the speed sparkline.
 	sparkWidth = 20
 
-	tickInterval = time.Second / 10
-	accentColor  = "#2EF8BB"
+	tickInterval  = time.Second / 10
+	downloadColor = "#2EF8BB"
+	uploadColor   = "#BD52FF"
 )
 
 var (
-	speedStyle = lipgloss.NewStyle().Bold(true)
-	unitStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	sparkStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(accentColor))
-	peakStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	metaStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
-	baseStyle  = lipgloss.NewStyle().Padding(1, 2)
+	speedStyle    = lipgloss.NewStyle().Bold(true)
+	unitStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+	downloadStyle = lipgloss.NewStyle().Foreground(lipgloss.Color(downloadColor))
+	uploadStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color(uploadColor))
+	peakStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+	metaStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
+	baseStyle     = lipgloss.NewStyle().Padding(1, 2)
 )
 
 type tickMsg time.Time
@@ -257,13 +259,13 @@ func (m model) View() string {
 	s.WriteString("\n")
 
 	if m.down {
-		s.WriteString(speedLine("down", m.speed, m.speeds, m.peak, true))
+		s.WriteString(speedLine("down", m.speed, m.speeds, m.peak, true, downloadStyle))
 	}
 	if m.down && m.up {
 		s.WriteString("\n")
 	}
 	if m.up {
-		s.WriteString(speedLine("up", m.uploadSpeed, m.uploadSpeeds, m.uploadPeak, m.phase == phaseUpload || m.phase == phaseDone))
+		s.WriteString(speedLine("up", m.uploadSpeed, m.uploadSpeeds, m.uploadPeak, m.phase == phaseUpload || m.phase == phaseDone, uploadStyle))
 	}
 
 	if (m.showClient && m.client != "") || (m.showServer && m.server != "") {
@@ -290,7 +292,7 @@ func latencyLabel(latency time.Duration) string {
 	return fmt.Sprintf("%.0f", float64(latency)/float64(time.Millisecond))
 }
 
-func speedLine(label string, speed float64, values []float64, peak float64, show bool) string {
+func speedLine(label string, speed float64, values []float64, peak float64, show bool, sparkStyle lipgloss.Style) string {
 	var s strings.Builder
 	s.WriteString(metaStyle.Render(fmt.Sprintf("%-4s ", label)))
 	if !show {
