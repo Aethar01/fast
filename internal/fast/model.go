@@ -48,32 +48,36 @@ type model struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
-	start   time.Time
-	last    speedSample
-	speed   float64
-	samples []speedSample
-	speeds  []float64
-	peak    float64
-	client  string
-	server  string
+	start      time.Time
+	last       speedSample
+	speed      float64
+	samples    []speedSample
+	speeds     []float64
+	peak       float64
+	client     string
+	server     string
+	showClient bool
+	showServer bool
 
 	done     bool
 	quitting bool
 }
 
-func newModel(config testConfig) model {
+func newModel(config testConfig, opts options) model {
 	ctx, cancel := context.WithTimeout(context.Background(), duration)
 	start := time.Now()
 
 	return model{
-		targets: config.Targets,
-		bytes:   &atomic.Int64{},
-		ctx:     ctx,
-		cancel:  cancel,
-		start:   start,
-		last:    speedSample{time: start},
-		client:  config.Client.Label(),
-		server:  targetLabel(config.Targets),
+		targets:    config.Targets,
+		bytes:      &atomic.Int64{},
+		ctx:        ctx,
+		cancel:     cancel,
+		start:      start,
+		last:       speedSample{time: start},
+		client:     config.Client.Label(),
+		server:     targetLabel(config.Targets),
+		showClient: opts.client,
+		showServer: opts.server,
 	}
 }
 
@@ -149,14 +153,14 @@ func (m model) View() string {
 		}
 		s.WriteString(peakStyle.Render(label))
 	}
-	if m.client != "" || m.server != "" {
+	if (m.showClient && m.client != "") || (m.showServer && m.server != "") {
 		s.WriteString("\n")
 	}
-	if m.client != "" {
+	if m.showClient && m.client != "" {
 		s.WriteString(metaStyle.Render("client " + m.client))
 		s.WriteString("\n")
 	}
-	if m.server != "" {
+	if m.showServer && m.server != "" {
 		s.WriteString(metaStyle.Render("server " + m.server))
 	}
 

@@ -13,6 +13,8 @@ type options struct {
 	token        string
 	ipPreference ipPreference
 	ipSet        bool
+	client       bool
+	server       bool
 }
 
 func Run(args []string, stdout io.Writer) error {
@@ -30,7 +32,7 @@ func Run(args []string, stdout io.Writer) error {
 		return err
 	}
 
-	_, err = tea.NewProgram(newModel(test)).Run()
+	_, err = tea.NewProgram(newModel(test, opts)).Run()
 	return err
 }
 
@@ -77,10 +79,12 @@ func newFlagSet(output io.Writer, opts *options, help *bool, ipv4 *bool, ipv6 *b
 		fmt.Fprintln(output, "  q, esc, ctrl+c    Quit")
 	}
 
+	flags.BoolVar(&opts.client, "client", false, "Show client info")
 	flags.BoolVar(help, "h", false, "Show help")
 	flags.BoolVar(help, "help", false, "Show help")
 	flags.BoolVar(ipv4, "ipv4", false, "Prefer IPv4 targets")
 	flags.BoolVar(ipv6, "ipv6", false, "Prefer IPv6 targets")
+	flags.BoolVar(&opts.server, "server", false, "Show server info")
 	flags.StringVar(&opts.token, "token", "", "Use an explicit fast.com API `token`")
 	return flags
 }
