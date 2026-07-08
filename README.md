@@ -11,6 +11,8 @@ Usage:
   fast [flags]
 
 Flags:
+  -client
+        Show client info
   -connections connections
         Number of parallel connections (default 8)
   -download
@@ -26,12 +28,10 @@ Flags:
         Prefer IPv6 targets
   -json
         Print results as JSON
-  -no-client
-        Hide client info from output
-  -no-server
-        Hide server info from output
   -no-tui
         Print plain text instead of the terminal UI
+  -server
+        Show server info
   -token token
         Use an explicit fast.com API token
   -upload
